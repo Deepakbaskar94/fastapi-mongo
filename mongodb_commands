@@ -1,0 +1,111 @@
+mapping with sql
+database - database
+tables - collections
+rows - documents (BSON)
+columns - fields
+
+
+
+
+current db:
+db
+
+to list all databases:
+show databases
+
+go to particular db:
+use dbname
+
+create non capped collection:
+db.createCollection("myCollection")
+
+Creating a Capped Collection
+db.createCollection("mySecondCollection", {capped : true, size : 2, max : 2})
+
+create and insert data
+db.collectionname.insert({"name": "john", "age" : 22, "location": "colombo"})
+
+================================================================================================
+---------------------------------Insert:
+=========================================insertone()
+db.myCollection.insertOne(
+  {
+    "name": "navindu", 
+    "age": 22
+  }
+)
+
+=========================================insertMany()
+db.myCollection.insertMany([
+  {
+    "name": "navindu", 
+    "age": 22
+  },
+  {
+    "name": "kavindu", 
+    "age": 20
+  },
+
+  {
+    "name": "john doe", 
+    "age": 25,
+    "location": "colombo"
+  }
+])
+
+================================================================================================
+-----------------------------------Get:
+db.myCollection.find()
+db.myCollection.find().pretty()
+db.myCollection.find({}, _id: 0).pretty()		#to avoid showing _id
+
+-----------------------------------Get with filter:
+db.myCollection.find(
+  {
+    name: "john"
+  }
+)
+
+-----------------------------------Get with less than: $lt, $gt, $lte, $gte, $ne
+db.myCollection.find(
+  {
+    age : {$lt : 25}
+  }
+)
+
+================================================================================================
+-----------------------------------update:
+db.myCollection.update({_id : 20}, {$set: {age: 23}})
+
+-----------------------------------to remove a property or field from a document:
+db.myCollection.update({_id: 20}, {$unset: age});
+
+-----------------------------------removing a document:
+db.myCollection.remove({name: "navindu"});
+
+-----------------------------------removing a collection:
+db.myCollection.remove({});
+
+
+================================================================================================
+-----------------------------------Logical Operators:
+===================================$and (both true) $or (any one true) 
+db.myCollection.find({$and:[{age : {$lt : 25}}, {location: "colombo"}]});
+
+
+================================================================================================
+AGGREGATION:
+Imagine if we had male and female students in a recordBook collection and we want a total count on each of them. In order to get the sum of males and females, we could use the $group aggregate function.
+
+db.recordBook.aggregate([
+  {
+    $group : {_id : "$gender", result: {$sum: 1}}
+  }  
+]);
+
+
+
+
+
+
+
