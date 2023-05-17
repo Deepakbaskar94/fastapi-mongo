@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # from server.routes.user import user_route
 # from server.routes.item import item_route
-from server.routes.student import router
+from app.server.routes.patient_details import patient_detail_route
 
 app = FastAPI()
 
@@ -17,9 +17,7 @@ app.add_middleware(
 )
 
 
-# app.include_router(user_route)
-# app.include_router(item_route)
-app.include_router(router)
+app.include_router(patient_detail_route)
 
 
 @app.get("/", tags=["Root"])

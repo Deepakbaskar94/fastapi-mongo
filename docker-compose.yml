@@ -1,0 +1,104 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+  mongodb:    #container name
+    image: mongo  #container image
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root123$
+    volumes:
+      - ./data:/data/db
+    networks:
+      - backend
+  mongo-express:
+      image: mongo-express
+      restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
+      ports:
+        - 8080:8081
+      environment:
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=root123$
+        - ME_CONFIG_MONGODB_SERVER=mongodb
+      networks:
+        - backend
+
+networks:
+  backend:
+    driver: bridge
+
+
+# ================working with voulume===================
+# version: '3.8'
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "80:80"
+#     depends_on:
+#       - mongodb
+#     # networks:
+#     #   - backend
+#   mongodb:    #container name
+#     image: mongo  #container image
+#     ports:
+#       - 27017:27017
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=root
+#       - MONGO_INITDB_ROOT_PASSWORD=root123$
+#     volumes:
+#       - ./data:/data/db
+#   mongo-express:
+#       image: mongo-express
+#       restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
+#       ports:
+#         - 8080:8081
+#       environment:
+#         - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+#         - ME_CONFIG_MONGODB_ADMINPASSWORD=root123$
+#         - ME_CONFIG_MONGODB_SERVER=mongodb
+# # volumes:
+# #   mongo-data:
+# #       driver: local
+
+
+# ==============working================================
+# version: '3.8'
+# services:
+#   app:
+#     build: .
+#     ports:
+#       - "80:80"
+#     depends_on:
+#       - mongodb
+#     # networks:
+#     #   - backend
+#   mongodb:    #container name
+#     image: mongo  #container image
+#     ports:
+#       - 27017:27017
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=root
+#       - MONGO_INITDB_ROOT_PASSWORD=root123$
+#     volumes:
+#       - mongo-data:/data/db
+#   mongo-express:
+#       image: mongo-express
+#       restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
+#       ports:
+#         - 8080:8081
+#       environment:
+#         - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+#         - ME_CONFIG_MONGODB_ADMINPASSWORD=root123$
+#         - ME_CONFIG_MONGODB_SERVER=mongodb
+# volumes:
+#   mongo-data:
+#       driver: local
